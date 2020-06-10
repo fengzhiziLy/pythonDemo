@@ -11,7 +11,10 @@ logging.basicConfig(level=logging.INFO)
 
 class TestSelenium:
     def setup(self):
-        self.driver = webdriver.Chrome()
+        # 连接调试开关打开的Chrome进程
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.debugger_address = "127.0.0.1:9222"
+        self.driver = webdriver.Chrome(options=chrome_options)
         # 隐式等待
         self.driver.implicitly_wait(20)
         self.driver.get('https://testerhome.com/')
@@ -32,9 +35,6 @@ class TestSelenium:
         search.send_keys("先到先得")
         self.driver.find_element_by_name("q").submit()
         sleep(3)
-        # self.driver.find_element(By.CSS_SELECTOR, '.title [title*="Android 端测试基础知识分享"]').click()
-        # self.driver.find_element(By.XPATH, '//a[contains(text(), "adb查看设备信息")]').click()
-        # self.driver.find_element(By.CSS_SELECTOR, '第五届中国移动互联网测试开发大会 ').click()
         self.driver.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/div[1]/div[1]/a').click()
         sleep(5)
         self.driver.find_element(By.XPATH, '//p[contains(text(), "问卷")]/a').click()
@@ -48,6 +48,7 @@ class TestSelenium:
         #     self.driver.switch_to.window(w)
         #     logging.info(self.driver.title)
 
+    # 显示等待
     def test_explicit_wait(self):
         self.driver.find_element_by_partial_link_text("社区").click()
         self.driver.find_element_by_partial_link_text("最新发布").click()
@@ -56,3 +57,13 @@ class TestSelenium:
             expected_conditions.visibility_of_element_located((By.CSS_SELECTOR, ".topic .title a"))
         )
         logging.info((time()))
+
+    # 表单
+    def test_form_login(self):
+        self.driver.get("https://testerhome.com/account/sign_in")
+        self.driver.find_element_by_id("user_login").send_keys("feng@qq.com")
+        self.driver.find_element(By.CSS_SELECTOR, "#user_password").send_keys("111111")
+        self.driver.find_element(By.CSS_SELECTOR, "#user_remember_me").click()
+        self.driver.find_element(By.NAME, "commit").click()
+        sleep(30)
+
