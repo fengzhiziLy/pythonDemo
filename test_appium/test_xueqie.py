@@ -54,8 +54,8 @@ class TestXueqiu:
             self.driver.swipe(500, 900, 100, 200, 1000)
 
     @pytest.mark.parametrize("keyword, stock_type, expect_price", [
-        ('alibaba', 'BABA', 220),
-        ('xiaomi', '01810', 12)
+        ('alibaba', 'BABA', 210),
+        ('xiaomi', '01810', 13)
     ])
     def test_search(self, keyword, stock_type, expect_price):
         self.driver.find_element_by_id("home_search").click()
